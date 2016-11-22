@@ -35,17 +35,12 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         return groups.count
     }
     
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            groupField.text = groups[row].name
-    }
-    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        groupField.text = groups[row].name
         return groups[row].name
     }
     
     
-    //change all to .Value instead of .ChildAdded
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -68,7 +63,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         })
         
     }
-    
 
     func getTransactions(){
         
@@ -85,20 +79,40 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
                 
                 if let dictionary = snap.value as? [String: AnyObject] {
                     transaction.setValuesForKeys(dictionary)
-                    transactions.append(transaction)
-                    hasTransactions = true
-                    //sort by date
-                    transactions.sort(by: { (t1, t2) -> Bool in
-                        return (t1.timestamp?.int32Value)! < (t2.timestamp?.int32Value)!
-                    })
-                    
-                    DispatchQueue.main.async(execute: {
-                        self.tableView.reloadData()
-                    })
+                    if self.isCurrTransaction(transaction: transaction) { //add this month's transaction
+                        
+                        transactions.append(transaction)
+                        hasTransactions = true
+                        transactions.sort(by: { (t1, t2) -> Bool in
+                            return (t1.timestamp?.int32Value)! < (t2.timestamp?.int32Value)! //sort by date
+                        })
+                        
+                        DispatchQueue.main.async(execute: {
+                            self.tableView.reloadData()
+                        })
+                    }
                 
                 }
 
             }, withCancel: nil)
+        
+    }
+    
+    func isCurrTransaction(transaction: Transaction) -> Bool{
+        
+        let date = Date()
+        let calendar = NSCalendar.current
+        let month = calendar.component(.month, from: date)
+        
+        let transDate = Date(timeIntervalSince1970: transaction.timestamp as! TimeInterval)
+        let transMonth = calendar.component(.month, from: transDate)
+        
+        if month == transMonth {
+        
+            return true
+            
+        }
+        return false
         
     }
     
@@ -115,7 +129,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
                 
                 group.setValuesForKeys(dict)
                 groups.append(group)
-                //totals[group.name as String!] = 0
                 hasGroups = true
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
@@ -136,7 +149,7 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         addTransAlert.addTextField(configurationHandler: { (textField) -> Void in
             self.amountField = textField
             textField.placeholder = "$$ spent"
-            textField.keyboardType = UIKeyboardType.numbersAndPunctuation
+            textField.keyboardType = UIKeyboardType.decimalPad
             
         })
         
@@ -332,17 +345,20 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
     func deleteTransaction(_ myTransaction: Transaction) {
         
         let timestamp = myTransaction.timestamp
         let category = myTransaction.category
         
-        //first get group
         let user = FIRAuth.auth()?.currentUser
-        let catRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("transactions").child((user?.uid)!)
+        let transRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("transactions").child((user?.uid)!)
         
-        catRef.observe(.value, with: { (snapshot) -> Void in
-            
+        transRef.observe(.value, with: { (snapshot) -> Void in
             
             //find the transaction in database
             
@@ -356,7 +372,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
                     if transaction.timestamp == timestamp{
                         
                         (child as AnyObject).ref.removeValue()
-                        
                         
                         for transaction in transactions {
                             

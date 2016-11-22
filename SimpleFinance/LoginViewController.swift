@@ -107,7 +107,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                             self.activityIndicator.stopAnimating()
                             UIApplication.shared.endIgnoringInteractionEvents()
                             
-                            let alert = UIAlertController(title: "Something went wrong!", message: "Try again!", preferredStyle: .alert)
+                            let alert = UIAlertController(title: "Something went wrong!", message: error?.localizedDescription, preferredStyle: .alert)
                             let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
                             alert.addAction(action)
                             self.present(alert, animated: true, completion: nil)
@@ -137,7 +137,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 self.activityIndicator.stopAnimating()
                                 UIApplication.shared.endIgnoringInteractionEvents()
                                 
-                                let alert = UIAlertController(title: "Something went wrong!", message: "Try again!", preferredStyle: .alert)
+                                let alert = UIAlertController(title: "Something went wrong!", message: err?.localizedDescription, preferredStyle: .alert)
                                 let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
                                 alert.addAction(action)
                                 self.present(alert, animated: true, completion: nil)

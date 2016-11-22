@@ -11,11 +11,6 @@ import FirebaseAuth
 import FirebaseDatabase
 import Firebase
 
-
-
-
-//var totals = [String: Double!]()
-
 class GoalsViewController: UITableViewController {
     
     var createCategoryField = UITextField()
@@ -39,13 +34,8 @@ class GoalsViewController: UITableViewController {
             self.tableView.reloadData()
         })
         
-        //NotificationCenter.default.addObserver(self, selector: #selector(reloadTableData(_:)), name: .reload, object: nil)
         
     }
-    
-//    func reloadTableData(_ notification: Notification) {
-//        tableView.reloadData()
-//    }
     
 
     
@@ -61,7 +51,6 @@ class GoalsViewController: UITableViewController {
             if let dict = snapshot.value as? [String: AnyObject] {
                 group.setValuesForKeys(dict)
                 groups.append(group)
-                //totals[group.name as String!] = Double(group.total!)
                 hasGroups = true
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
@@ -120,17 +109,14 @@ class GoalsViewController: UITableViewController {
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
                 })
-    
                 
             }
             
             }, withCancel: nil)
         
     }
+ 
     
-
-
-
     @IBAction func addCategory(_ sender: UIBarButtonItem) {
         
             let addCategoryAlert = UIAlertController(title: "Add a category", message: "\n", preferredStyle: .alert)
@@ -152,40 +138,59 @@ class GoalsViewController: UITableViewController {
             addCategoryAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             
             addCategoryAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-                //let categoryField = addCategoryAlert.textFields![0] as UITextField
                 
-                if self.createCategoryField.text != "" && self.goalField.text != ""{
+                var isUnique = true
+                
+                if self.createCategoryField.text != "" && self.goalField.text != "" {
                     
-                    let user = FIRAuth.auth()?.currentUser
-                    let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!).childByAutoId()
-
-                        let newCategory = [
-                            
-                            "name": self.createCategoryField.text as String!,
-                            "goal" : self.goalField.text as String!,
-                            "total" : 0 as NSNumber
-                            //,"transactions" : " "
-                            
-                        ] as [String : Any]
+                    for item in groups {
                         
-                            ref.updateChildValues(newCategory as [AnyHashable: Any], withCompletionBlock: { (error, ref) -> Void in
+                        if self.createCategoryField.text! as String == item.name {
+                            
+                            isUnique = false
+                            
+                            let alert = UIAlertController(title: "Pick a different name", message: "A category with this name already exists. Please pick a new name", preferredStyle: .alert)
+                            let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                            alert.addAction(action)
+                            self.present(alert, animated: true, completion: nil)
+                            
+                        }
+                        
+                        
+                    }
+                    
+                    if isUnique { //checks for same name groups
+                    
+                        let user = FIRAuth.auth()?.currentUser
+                        let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!).childByAutoId()
+
+                            let newCategory = [
                                 
-                                if (error != nil) {
-                                    
-                                    let alert = UIAlertController(title: "Something went wrong!", message: .none, preferredStyle: .alert)
-                                    let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-                                    alert.addAction(action)
-                                    self.present(alert, animated: true, completion: nil)
-                                    
-                                } else {
-                                    
-                                    DispatchQueue.main.async(execute: {
-                                        self.tableView.reloadData()
-                                    })
-                                    
-                                }
+                                "name": self.createCategoryField.text as String!,
+                                "goal" : self.goalField.text as String!,
+                                "total" : 0 as NSNumber
                                 
-                            })
+                            ] as [String : Any]
+                            
+                                ref.updateChildValues(newCategory as [AnyHashable: Any], withCompletionBlock: { (error, ref) -> Void in
+                                    
+                                    if (error != nil) {
+                                        
+                                        let alert = UIAlertController(title: "Something went wrong!", message: .none, preferredStyle: .alert)
+                                        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                                        alert.addAction(action)
+                                        self.present(alert, animated: true, completion: nil)
+                                        
+                                    } else {
+                                        
+                                        DispatchQueue.main.async(execute: {
+                                            self.tableView.reloadData()
+                                        })
+                                        
+                                    }
+                                    
+                                })
+                    }
                 }
             }))
             
@@ -203,7 +208,7 @@ class GoalsViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -220,6 +225,7 @@ class GoalsViewController: UITableViewController {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "groupCell" , for: indexPath) as! GroupCell
         
         if groups.count != 0{
+            
             cell.textLabel?.text = groups[indexPath.row].name
             cell.textLabel?.font = UIFont(name: "Helvetica Neue", size: 17)
             
@@ -246,9 +252,6 @@ class GoalsViewController: UITableViewController {
             
             let group = groups[indexPath.row]
             deleteGroup(group)
-            DispatchQueue.main.async(execute: {
-                self.tableView.reloadData()
-            })
             
         }
         
@@ -259,42 +262,72 @@ class GoalsViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    func deleteGroup(_ group: Group){
+    func deleteGroup(_ myGroup: Group){
         
-        //first get group
         let user = FIRAuth.auth()?.currentUser
-        let catRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("users").child((user?.uid)!).child("categories")
+        let catRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!)
         
-        catRef.observe(.value, with: { (snapshot) -> Void in
+       catRef.observe(.childAdded, with: { (snapshot) -> Void in
+        
+        let group = Group()
+        
+        if let dict = snapshot.value as? [String: AnyObject] {
+            group.setValuesForKeys(dict)
             
-            for child in snapshot.children {
+            if ( myGroup.name == group.name) {
+            
+                snapshot.ref.removeValue()
+            
+                var i = 0
                 
-                let snap = child as! FIRDataSnapshot
-                
-                if let dict = snap.value as? [String: AnyObject] {
+                for goal in groups {
                     
-                    let name = dict["name"] as! String
-                    
-                    if name == group.name {
+                    if goal.name == group.name {
                         
-                        let transRef = catRef.child(snap.key).removeValue(completionBlock: { (error, ref) -> Void in
-                            
-                            if error != nil {
-                                print(error)
-                            } else {
-                                var i = 0
-                                for category in groups {
-                                    if name == category.name {
-                                        groups.remove(at: i)
-                                    }
-                                    i += 1
-                                }
-                                DispatchQueue.main.async(execute: {
-                                    self.tableView.reloadData()
-                                })
-                            }
-                            
-                        })
+                        groups.remove(at: i)
+                 
+                    }
+                    
+                    i += 1
+         
+                }
+                DispatchQueue.main.async(execute: {
+                    self.tableView.reloadData()
+                })
+                
+            }
+            
+        }
+        
+       }, withCancel: nil)
+        
+        //delete all transactions in the category
+        
+        let transRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("transactions").child((user?.uid)!)
+        
+        transRef.observe(.childAdded, with: { (snapshot) -> Void in
+            
+            //find transactions in the category
+            
+            if let dictionary = snapshot.value as? [String: AnyObject] {
+                
+                let transaction = Transaction()
+                transaction.setValuesForKeys(dictionary)
+                
+                if transaction.category == myGroup.name {
+                    
+                    snapshot.ref.removeValue()
+                    
+                    let timestamp = transaction.timestamp
+                    var i = 0
+                    
+                    for item in transactions {
+                        
+                        if timestamp == item.timestamp{
+                            transactions.remove(at: i)
+                        }
+                        
+                        i += 1
                         
                     }
                     
@@ -306,5 +339,4 @@ class GoalsViewController: UITableViewController {
         
     }
     
-
 }
