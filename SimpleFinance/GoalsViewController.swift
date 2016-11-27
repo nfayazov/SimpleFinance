@@ -15,29 +15,23 @@ class GoalsViewController: UITableViewController {
     
     var createCategoryField = UITextField()
     var goalField = UITextField()
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    var incomeField = UITextField()
+    var totalGoal = 0.00
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.delegate = self
         tableView.dataSource = self
         
         tableView.register(GroupCell.self, forCellReuseIdentifier: "groupCell")
-        if !hasGroups {
-            getGroups()
-        }
         
-        if !hasTransactions{
-            getTransactions()
-        }
-        DispatchQueue.main.async(execute: {
-            self.tableView.reloadData()
-        })
+        getTotalGoal()
+        getGroupsWithSpinner()
+        getGroups()
         
         
     }
-    
-
     
     func getGroups(){
         
@@ -51,7 +45,9 @@ class GoalsViewController: UITableViewController {
             if let dict = snapshot.value as? [String: AnyObject] {
                 group.setValuesForKeys(dict)
                 groups.append(group)
-                hasGroups = true
+                groups.sort(by: { (g1, g2) -> Bool in
+                    return (g1.name)! < (g2.name)! //sort alphabetically
+                })
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
                 })
@@ -61,61 +57,64 @@ class GoalsViewController: UITableViewController {
             }, withCancel: nil)
         
     }
-
+    func getGroupsWithSpinner() {
         
-    func isCurrTransaction(_ transaction: Transaction) -> Bool{
-        //TODO: change back to months
-        
-        let date = Date(timeIntervalSince1970: TimeInterval(transaction.timestamp!))
-        let calendar = Calendar.current
-        let components = (calendar as NSCalendar).components([.day , .month , .year], from: date)
-        let day = components.day
-        //let month = components.month
-        
-        
-        let currDate = Date()
-        let currCalendar = Calendar.current
-        let currComponents = (currCalendar as NSCalendar).components([.day , .month , .year], from: currDate)
-        //let currMonth = currComponents.month
-        let currDay = currComponents.day
-
-        if (day == currDay) { //change to month
-            return true
-        }
-        
-        return false
-    }
-    
-    func getTransactions(){
+        var dataCount: Int!
+        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         
         let user = FIRAuth.auth()?.currentUser
-        let transRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("transactions").child((user?.uid)!)
+        let transRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!)
         
-        transRef.observe(.childAdded, with: { (snap) -> Void in
+        transRef.observe(.value, with: { (snap) -> Void in
             
-            //get group of the transaction
-            
-            let transaction = Transaction()
-            
-            if let dictionary = snap.value as? [String: AnyObject] {
-                transaction.setValuesForKeys(dictionary)
-                transactions.append(transaction)
-                hasTransactions = true
-                //sort by date
-                transactions.sort(by: { (t1, t2) -> Bool in
-                    return (t1.timestamp?.int32Value)! < (t2.timestamp?.int32Value)!
-                })
+            dataCount = Int(snap.childrenCount)
+            if dataCount == groups.count {
                 
+                self.activityIndicator.stopAnimating()
+                UIApplication.shared.endIgnoringInteractionEvents()
+                
+            }
+            
+        }, withCancel: nil)
+        
+    }
+    
+    func getTotalGoal(){
+        
+        let user = FIRAuth.auth()?.currentUser
+        let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("users").child((user?.uid)!)
+        
+        ref.observe(.childAdded, with: { (snap) -> Void in
+        
+            if snap.key == "totalGoal" {
+                
+                self.totalGoal = snap.value as! Double
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
                 })
                 
             }
-            
-            }, withCancel: nil)
+        
+        }, withCancel: nil)
         
     }
- 
+    
+    func updateGoal(newGoal: Double){
+        
+        let user = FIRAuth.auth()?.currentUser
+        let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("users").child((user?.uid)!).child("totalGoal")
+        
+        ref.setValue(newGoal)
+        getTotalGoal()
+        
+        
+    }
     
     @IBAction func addCategory(_ sender: UIBarButtonItem) {
         
@@ -131,7 +130,7 @@ class GoalsViewController: UITableViewController {
             addCategoryAlert.addTextField(configurationHandler: { (textField) -> Void in
                 self.goalField = textField
                 textField.placeholder = "Fiscal goal per month"
-                textField.keyboardType = UIKeyboardType.numbersAndPunctuation
+                textField.keyboardType = UIKeyboardType.decimalPad
             
             })
         
@@ -155,7 +154,6 @@ class GoalsViewController: UITableViewController {
                             self.present(alert, animated: true, completion: nil)
                             
                         }
-                        
                         
                     }
                     
@@ -214,33 +212,58 @@ class GoalsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if groups.count != 0 {
-            return groups.count
+            return groups.count + 1
         } else {
             return 1
         }
     }
 
     
+    func calculateTotals() -> Double {
+        
+        var total: Double = 0
+        
+        for group in groups {
+            
+            total += group.total as! Double
+            
+        }
+        
+        return total
+        
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "groupCell" , for: indexPath) as! GroupCell
         
-        if groups.count != 0{
+        if indexPath.row == 0 {
             
-            cell.textLabel?.text = groups[indexPath.row].name
-            cell.textLabel?.font = UIFont(name: "Helvetica Neue", size: 17)
-            
-            let goal = Double(groups[indexPath.row].goal!)
-            let total = Double(groups[indexPath.row].total!)
-            let goalString = String(format: "%.2f", goal!)
-            let totalString = String(format: "%.2f", total)
-            cell.progressLabel.text = "\(totalString)/\(goalString)"
-            
-            let percent = (total/goal!) * 100
-            cell.detailTextLabel?.text = ("\(String(format: "%.2f", percent))%")
-            cell.detailTextLabel?.textColor = UIColor.lightGray
+            cell.textLabel?.text = "Total Spent/Monthly Goal"
+            cell.backgroundColor = UIColor.red
+            cell.textLabel?.textAlignment = .center
+            cell.progressLabel.text = ("\(String(calculateTotals()))/\(String(describing: totalGoal))")
             
         } else {
-            cell.textLabel?.text = ""
+        
+            if groups.count != 0{
+                
+                cell.textLabel?.text = groups[indexPath.row-1].name
+                cell.textLabel?.font = UIFont(name: "Helvetica Neue", size: 17)
+                
+                let goal = Double(groups[indexPath.row-1].goal!)
+                let total = Double(groups[indexPath.row-1].total!)
+                let goalString = String(format: "%.2f", goal!)
+                let totalString = String(format: "%.2f", total)
+                cell.progressLabel.text = "\(totalString)/\(goalString)"
+                
+                let percent = (total/goal!) * 100
+                cell.detailTextLabel?.text = ("\(String(format: "%.2f", percent))%")
+                cell.detailTextLabel?.textColor = UIColor.lightGray
+                
+            } else {
+                cell.textLabel?.text = ""
+            }
+            
         }
 
         return cell
@@ -254,6 +277,32 @@ class GoalsViewController: UITableViewController {
             deleteGroup(group)
             
         }
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let addTotalAlert = UIAlertController(title: "Change income/goal", message: "What is your goal for this month?", preferredStyle: .alert)
+        
+        addTotalAlert.addTextField(configurationHandler: { (textField) -> Void in
+            self.incomeField = textField
+            textField.placeholder = "$$"
+            
+        })
+        
+        addTotalAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        addTotalAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+        
+            if self.incomeField.text != "" {
+                
+                self.updateGoal(newGoal: Double(self.incomeField.text!)!)
+                
+            }
+        
+        }))
+        
+        self.present(addTotalAlert, animated: true, completion: nil)
         
     }
     

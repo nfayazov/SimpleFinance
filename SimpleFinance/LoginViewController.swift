@@ -14,12 +14,12 @@ import FirebaseDatabase
 var noCategories = false
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
-    
 
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    
     @IBOutlet var emailField: UITextField!
     @IBOutlet var passwordField: UITextField!
 
-    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
 
     @IBAction func createAction(_ sender: AnyObject) {
         
@@ -126,7 +126,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         let components = (calendar as NSCalendar).components([.day , .month , .year], from: date)
                         let month = components.month
                         
-                        let values = ["email" : self.emailField.text as AnyObject, "categories" : emptyString] as [String : Any]
+                        let values = ["email" : self.emailField.text as AnyObject, "categories" : emptyString, "totalGoal" : 100.00] as [String : Any]
                         
                         userRef.updateChildValues(values as [AnyHashable: Any], withCompletionBlock: { (err, ref) -> Void in
                             

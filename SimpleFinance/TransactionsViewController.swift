@@ -18,6 +18,7 @@ var hasTransactions = false //don't need this
 class TransactionsViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     let groupPicker = UIPickerView()
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
     var groupField = UITextField()
     var createCategoryField = UITextField()
@@ -49,14 +50,9 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         
         tableView.register(TransactionCell.self, forCellReuseIdentifier: "cell")
         
-        if !hasGroups {
-            getGroups()
-        }
-        if !hasTransactions{
-            getTransactions()
-        }
         
-        //NotificationCenter.default.post(name: .reload, object: nil)
+            getTransactionsWithSpinner()
+            getTransactions()
         
         DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
@@ -116,31 +112,36 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         
     }
     
-    func getGroups(){
+    func getTransactionsWithSpinner() {
+        
+        var dataCount: Int!
+        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         
         let user = FIRAuth.auth()?.currentUser
-        let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!)
+        let transRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("transactions").child((user?.uid)!)
         
-        ref.observe(.childAdded, with: { (snapshot) -> Void in
+        transRef.observe(.value, with: { (snap) -> Void in
             
-            let group = Group()
-            
-            if let dict = snapshot.value as? [String: AnyObject] {
+            dataCount = Int(snap.childrenCount)
+            if dataCount == transactions.count {
                 
-                group.setValuesForKeys(dict)
-                groups.append(group)
-                hasGroups = true
-                DispatchQueue.main.async(execute: {
-                    self.tableView.reloadData()
-                })
+                self.activityIndicator.stopAnimating()
+                UIApplication.shared.endIgnoringInteractionEvents()
                 
             }
             
-            }, withCancel: nil)
+        }, withCancel: nil)
+        
+        
         
     }
-
-
+    
     @IBAction func addTransaction(_ sender: UIBarButtonItem) {
         
         let addTransAlert = UIAlertController(title: "Add a transaction", message: "\n", preferredStyle: .alert)
@@ -150,6 +151,10 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
             self.amountField = textField
             textField.placeholder = "$$ spent"
             textField.keyboardType = UIKeyboardType.decimalPad
+            var frameRect: CGRect = textField.frame;
+            frameRect.size.height = 300
+            textField.frame = frameRect
+            
             
         })
         
@@ -157,12 +162,18 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
             self.groupField = textField
             textField.placeholder = "Choose category"
             textField.inputView = self.groupPicker
+            var frameRect: CGRect = textField.frame;
+            frameRect.size.height = 300
+            textField.frame = frameRect
             
             })
         
         addTransAlert.addTextField { (textField) -> Void in
             self.descriptionField = textField
             textField.placeholder = "Description"
+            var frameRect: CGRect = textField.frame;
+            frameRect.size.height = 300
+            textField.frame = frameRect
         }
         
         addTransAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -180,7 +191,7 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
                 
                 let user = FIRAuth.auth()?.currentUser
                 
-//                add to category total
+                //add to category total
                 let catRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!)
                 
                 catRef.observe(.childAdded, with: { snapshot in
