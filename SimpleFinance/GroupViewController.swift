@@ -1,8 +1,8 @@
 //
-//  GoalsViewController.swift
+//  GroupViewController.swift
 //  SimpleFinance
 //
-//  Created by Nadir Fayazov on 8/22/16.
+//  Created by Nadir Fayazov on 11/28/16.
 //  Copyright © 2016 nfayazov. All rights reserved.
 //
 
@@ -11,8 +11,10 @@ import FirebaseAuth
 import FirebaseDatabase
 import Firebase
 
-class GoalsViewController: UITableViewController {
-    
+class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+
+    @IBOutlet var totalLabel: UILabel!
+    @IBOutlet var tableView: UITableView!
     var createCategoryField = UITextField()
     var goalField = UITextField()
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
@@ -26,10 +28,9 @@ class GoalsViewController: UITableViewController {
         
         tableView.register(GroupCell.self, forCellReuseIdentifier: "groupCell")
         
-        getTotalGoal()
-        getGroupsWithSpinner()
+        showSpinner()
         getGroups()
-        
+        getTotalGoal()
         
     }
     
@@ -54,10 +55,11 @@ class GoalsViewController: UITableViewController {
                 
             }
             
-            }, withCancel: nil)
+        }, withCancel: nil)
         
     }
-    func getGroupsWithSpinner() {
+    
+    func showSpinner() {
         
         var dataCount: Int!
         activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
@@ -91,21 +93,22 @@ class GoalsViewController: UITableViewController {
         let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("users").child((user?.uid)!)
         
         ref.observe(.childAdded, with: { (snap) -> Void in
-        
+            
             if snap.key == "totalGoal" {
                 
                 self.totalGoal = snap.value as! Double
+                self.reloadTotalSpent()
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
                 })
                 
             }
-        
+            
         }, withCancel: nil)
         
     }
     
-    func updateGoal(newGoal: Double){
+    func updateTotalGoal(newGoal: Double){
         
         let user = FIRAuth.auth()?.currentUser
         let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("users").child((user?.uid)!).child("totalGoal")
@@ -116,110 +119,150 @@ class GoalsViewController: UITableViewController {
         
     }
     
-    @IBAction func addCategory(_ sender: UIBarButtonItem) {
+    func updateGroupGoal(newGoal: Double, myGroup: Group){
         
-            let addCategoryAlert = UIAlertController(title: "Add a category", message: "\n", preferredStyle: .alert)
+        let user = FIRAuth.auth()?.currentUser
+        let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!)
         
-            //add amount of transactions text field
-            addCategoryAlert.addTextField(configurationHandler: { (textField) -> Void in
-                self.createCategoryField = textField
-                textField.placeholder = "Category"
-                
-            })
-        
-            addCategoryAlert.addTextField(configurationHandler: { (textField) -> Void in
-                self.goalField = textField
-                textField.placeholder = "Fiscal goal per month"
-                textField.keyboardType = UIKeyboardType.decimalPad
+        ref.observe(.childAdded, with: { (snap) -> Void in
             
-            })
-        
-            addCategoryAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            let group = Group()
             
-            addCategoryAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-                
-                var isUnique = true
-                
-                if self.createCategoryField.text != "" && self.goalField.text != "" {
+            if let dict = snap.value as? [String: AnyObject] {
+                group.setValuesForKeys(dict)
+                if group.name == myGroup.name {
                     
+                    snap.ref.child("goal").setValue(String(newGoal))
+                    DispatchQueue.main.async(execute: {
+                        self.tableView.reloadData()
+                    })
+                    
+                    //change goal in groups array
+                    var i = 0
                     for item in groups {
                         
-                        if self.createCategoryField.text! as String == item.name {
+                        if item.name == myGroup.name{
+                            groups[i].goal = String(newGoal)
+                        }
+                        
+                        i = i + 1
+                        
+                    }
+                    
+                }
+                
+            }
+
+            
+        }, withCancel: nil)
+        
+        //ref.setValue(newGoal)
+        
+    }
+    
+    @IBAction func addGroup(_ sender: Any) {
+        
+        let addCategoryAlert = UIAlertController(title: "Add a category", message: "\n", preferredStyle: .alert)
+        
+        //add amount of transactions text field
+        addCategoryAlert.addTextField(configurationHandler: { (textField) -> Void in
+            self.createCategoryField = textField
+            textField.placeholder = "Category"
+            
+        })
+        
+        addCategoryAlert.addTextField(configurationHandler: { (textField) -> Void in
+            self.goalField = textField
+            textField.placeholder = "Fiscal goal per month"
+            textField.keyboardType = UIKeyboardType.decimalPad
+            
+        })
+        
+        addCategoryAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        addCategoryAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            
+            var isUnique = true
+            
+            if self.createCategoryField.text != "" && self.goalField.text != "" {
+                
+                for item in groups {
+                    
+                    if self.createCategoryField.text! as String == item.name {
+                        
+                        isUnique = false
+                        
+                        let alert = UIAlertController(title: "Pick a different name", message: "A category with this name already exists. Please pick a new name", preferredStyle: .alert)
+                        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                        alert.addAction(action)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    }
+                    
+                }
+                
+                if isUnique { //checks for same name groups
+                    
+                    let user = FIRAuth.auth()?.currentUser
+                    let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!).childByAutoId()
+                    
+                    let newCategory = [
+                        
+                        "name": self.createCategoryField.text as String!,
+                        "goal" : self.goalField.text as String!,
+                        "total" : 0 as NSNumber
+                        
+                        ] as [String : Any]
+                    
+                    ref.updateChildValues(newCategory as [AnyHashable: Any], withCompletionBlock: { (error, ref) -> Void in
+                        
+                        if (error != nil) {
                             
-                            isUnique = false
-                            
-                            let alert = UIAlertController(title: "Pick a different name", message: "A category with this name already exists. Please pick a new name", preferredStyle: .alert)
+                            let alert = UIAlertController(title: "Something went wrong!", message: .none, preferredStyle: .alert)
                             let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
                             alert.addAction(action)
                             self.present(alert, animated: true, completion: nil)
                             
+                        } else {
+                            
+                            self.reloadTotalSpent()
+                            DispatchQueue.main.async(execute: {
+                                self.tableView.reloadData()
+                            })
+                            
                         }
                         
-                    }
-                    
-                    if isUnique { //checks for same name groups
-                    
-                        let user = FIRAuth.auth()?.currentUser
-                        let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!).childByAutoId()
-
-                            let newCategory = [
-                                
-                                "name": self.createCategoryField.text as String!,
-                                "goal" : self.goalField.text as String!,
-                                "total" : 0 as NSNumber
-                                
-                            ] as [String : Any]
-                            
-                                ref.updateChildValues(newCategory as [AnyHashable: Any], withCompletionBlock: { (error, ref) -> Void in
-                                    
-                                    if (error != nil) {
-                                        
-                                        let alert = UIAlertController(title: "Something went wrong!", message: .none, preferredStyle: .alert)
-                                        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-                                        alert.addAction(action)
-                                        self.present(alert, animated: true, completion: nil)
-                                        
-                                    } else {
-                                        
-                                        DispatchQueue.main.async(execute: {
-                                            self.tableView.reloadData()
-                                        })
-                                        
-                                    }
-                                    
-                                })
-                    }
+                    })
                 }
-            }))
-            
-            self.present(addCategoryAlert, animated: true, completion: nil)
+            }
+        }))
+        
+        self.present(addCategoryAlert, animated: true, completion: nil)
         
     }
     
-                
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if groups.count != 0 {
-            return groups.count + 1
+            return groups.count
         } else {
             return 1
         }
     }
-
     
-    func calculateTotals() -> Double {
+    func reloadTotalSpent() -> Void {
         
         var total: Double = 0
         
@@ -229,29 +272,20 @@ class GoalsViewController: UITableViewController {
             
         }
         
-        return total
+        self.totalLabel.text = ("Total Spent/Monthly Goal: \(String(total))/\(String(describing: self.totalGoal))")
         
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "groupCell" , for: indexPath) as! GroupCell
-        
-        if indexPath.row == 0 {
-            
-            cell.textLabel?.text = "Total Spent/Monthly Goal"
-            cell.backgroundColor = UIColor.red
-            cell.textLabel?.textAlignment = .center
-            cell.progressLabel.text = ("\(String(calculateTotals()))/\(String(describing: totalGoal))")
-            
-        } else {
         
             if groups.count != 0{
                 
-                cell.textLabel?.text = groups[indexPath.row-1].name
+                cell.textLabel?.text = groups[indexPath.row].name
                 cell.textLabel?.font = UIFont(name: "Helvetica Neue", size: 17)
                 
-                let goal = Double(groups[indexPath.row-1].goal!)
-                let total = Double(groups[indexPath.row-1].total!)
+                let goal = Double(groups[indexPath.row].goal!)
+                let total = Double(groups[indexPath.row].total!)
                 let goalString = String(format: "%.2f", goal!)
                 let totalString = String(format: "%.2f", total)
                 cell.progressLabel.text = "\(totalString)/\(goalString)"
@@ -261,18 +295,20 @@ class GoalsViewController: UITableViewController {
                 cell.detailTextLabel?.textColor = UIColor.lightGray
                 
             } else {
+                
                 cell.textLabel?.text = ""
+                cell.detailTextLabel?.text = ""
+                cell.progressLabel.text = ""
+                
             }
-            
-        }
-
+        
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-                        
+            
             let group = groups[indexPath.row]
             deleteGroup(group)
             
@@ -280,9 +316,11 @@ class GoalsViewController: UITableViewController {
         
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let addTotalAlert = UIAlertController(title: "Change income/goal", message: "What is your goal for this month?", preferredStyle: .alert)
+        print(groups[indexPath.row].name)
+        
+        let addTotalAlert = UIAlertController(title: "Change goal", message: "What is your goal for this month?", preferredStyle: .alert)
         
         addTotalAlert.addTextField(configurationHandler: { (textField) -> Void in
             self.incomeField = textField
@@ -293,13 +331,13 @@ class GoalsViewController: UITableViewController {
         addTotalAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         addTotalAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-        
+            
             if self.incomeField.text != "" {
                 
-                self.updateGoal(newGoal: Double(self.incomeField.text!)!)
+                self.updateGroupGoal(newGoal: Double(self.incomeField.text!)!, myGroup: groups[indexPath.row])
                 
             }
-        
+            
         }))
         
         self.present(addTotalAlert, animated: true, completion: nil)
@@ -309,6 +347,7 @@ class GoalsViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
+        self.reloadTotalSpent()
     }
     
     func deleteGroup(_ myGroup: Group){
@@ -316,39 +355,39 @@ class GoalsViewController: UITableViewController {
         let user = FIRAuth.auth()?.currentUser
         let catRef = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!)
         
-       catRef.observe(.childAdded, with: { (snapshot) -> Void in
-        
-        let group = Group()
-        
-        if let dict = snapshot.value as? [String: AnyObject] {
-            group.setValuesForKeys(dict)
+        catRef.observe(.childAdded, with: { (snapshot) -> Void in
             
-            if ( myGroup.name == group.name) {
+            let group = Group()
             
-                snapshot.ref.removeValue()
-            
-                var i = 0
+            if let dict = snapshot.value as? [String: AnyObject] {
+                group.setValuesForKeys(dict)
                 
-                for goal in groups {
+                if ( myGroup.name == group.name) {
                     
-                    if goal.name == group.name {
+                    snapshot.ref.removeValue()
+                    
+                    var i = 0
+                    
+                    for goal in groups {
                         
-                        groups.remove(at: i)
-                 
+                        if goal.name == group.name {
+                            
+                            groups.remove(at: i)
+                            
+                        }
+                        
+                        i += 1
+                        
                     }
+                    DispatchQueue.main.async(execute: {
+                        self.tableView.reloadData()
+                    })
                     
-                    i += 1
-         
                 }
-                DispatchQueue.main.async(execute: {
-                    self.tableView.reloadData()
-                })
                 
             }
             
-        }
-        
-       }, withCancel: nil)
+        }, withCancel: nil)
         
         //delete all transactions in the category
         

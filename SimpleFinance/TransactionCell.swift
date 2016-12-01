@@ -14,7 +14,7 @@ class TransactionCell: UITableViewCell {
         
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Helvetica Neue", size: 15)
+        label.font = UIFont(name: "Helvetica Neue", size: 17)
         return label
     }()
     
@@ -34,8 +34,8 @@ class TransactionCell: UITableViewCell {
         addSubview(groupLabel)
         
         timeLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        timeLabel.centerYAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
-        timeLabel.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        timeLabel.centerYAnchor.constraint(equalTo: self.topAnchor, constant: 25).isActive = true
+        timeLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
         timeLabel.heightAnchor.constraint(equalTo: (textLabel?.heightAnchor)!).isActive = true
 
         
