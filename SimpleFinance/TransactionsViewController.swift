@@ -41,7 +41,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         return groups[row].name
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -137,8 +136,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
             }
             
         }, withCancel: nil)
-        
-        
         
     }
     
@@ -277,7 +274,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         
     }
 
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -302,7 +298,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         }
         
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell" , for: indexPath) as! TransactionCell
@@ -311,34 +306,37 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         
         if transactions.count != 0 {
             
-
-                let transaction = transactions[(transactions.count-1) - indexPath.row]
-        
-                cell.textLabel?.text = "$\(transaction.amount!)"
-                cell.textLabel?.font = UIFont(name: "Helvetica Neue", size: 17)
             
-                cell.detailTextLabel?.text = "\(transaction.reason!)"
-                cell.detailTextLabel?.textColor = UIColor.lightGray
-                cell.detailTextLabel?.font = UIFont(name: "Helvetica Neue", size: 12)
+            let transaction = transactions[(transactions.count-1) - indexPath.row]
             
-                //set timestamp
-                    
-                let timestampDate = Date(timeIntervalSince1970: TimeInterval(transaction.timestamp!))
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateStyle = DateFormatter.Style.short
+            cell.textLabel?.text = "\(transaction.reason!)"
+            cell.textLabel?.font = UIFont(name: "Helvetica Neue", size: 17)
             
-                cell.timeLabel.text = dateFormatter.string(from: timestampDate)
-                cell.timeLabel.textColor = UIColor.lightGray
             
-                //set category indicator
-                cell.groupLabel.text = transaction.category
-                cell.groupLabel.textColor = UIColor.lightGray
-                
+            //set timestamp
+            let timestampDate = Date(timeIntervalSince1970: TimeInterval(transaction.timestamp!))
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = DateFormatter.Style.short
+            cell.detailTextLabel?.text = dateFormatter.string(from: timestampDate)
+            cell.detailTextLabel?.textColor = UIColor.lightGray
+            cell.detailTextLabel?.font = UIFont(name: "Helvetica Neue", size: 12)
+            
+            
+            cell.timeLabel.text = "$\(transaction.amount!)"
+            cell.timeLabel.textColor = UIColor.red
+            
+            //set category indicator
+            cell.groupLabel.text = transaction.category
+            cell.groupLabel.textColor = UIColor.lightGray
+            
 
             
         } else {
             
             cell.textLabel?.text = ""
+            cell.detailTextLabel?.text = ""
+            cell.timeLabel.text = ""
+            cell.groupLabel.text = ""
             
         }
         

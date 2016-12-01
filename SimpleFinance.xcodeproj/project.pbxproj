@@ -21,7 +21,7 @@
 		4F3062EE1D5BBF5F00BF8FF9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3062ED1D5BBF5F00BF8FF9 /* LoginViewController.swift */; };
 		4F3062F41D5CF9C000BF8FF9 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3062F31D5CF9C000BF8FF9 /* SettingsViewController.swift */; };
 		4F3062F61D5D060700BF8FF9 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3062F51D5D060700BF8FF9 /* TransactionsViewController.swift */; };
-		4F3062FA1D6B972100BF8FF9 /* GoalsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3062F91D6B972100BF8FF9 /* GoalsViewController.swift */; };
+		4F38BF1D1DED3CAD000A5983 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */; };
 		4F3BC4AC1D6E0F1C007A3555 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC4AB1D6E0F1C007A3555 /* Transaction.swift */; };
 		4F3BC4AE1D6F6410007A3555 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC4AD1D6F6410007A3555 /* Group.swift */; };
 		4F43C1631DD19A9C00AAD4C0 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F43C1621DD19A9C00AAD4C0 /* NotificationExtension.swift */; };
@@ -44,7 +44,7 @@
 		4F3062ED1D5BBF5F00BF8FF9 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4F3062F31D5CF9C000BF8FF9 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		4F3062F51D5D060700BF8FF9 /* TransactionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
-		4F3062F91D6B972100BF8FF9 /* GoalsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoalsViewController.swift; sourceTree = "<group>"; };
+		4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		4F3BC4AB1D6E0F1C007A3555 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		4F3BC4AD1D6F6410007A3555 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		4F43C1621DD19A9C00AAD4C0 /* NotificationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
@@ -110,8 +110,8 @@
 				4F24303C1D5821D300F1A5D8 /* AppDelegate.swift */,
 				4F24303E1D5821D300F1A5D8 /* ViewController.swift */,
 				4F2430401D5821D300F1A5D8 /* Main.storyboard */,
+				4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */,
 				4F3062F51D5D060700BF8FF9 /* TransactionsViewController.swift */,
-				4F3062F91D6B972100BF8FF9 /* GoalsViewController.swift */,
 				4F3062F31D5CF9C000BF8FF9 /* SettingsViewController.swift */,
 				4F3062ED1D5BBF5F00BF8FF9 /* LoginViewController.swift */,
 				4F2430511D58263400F1A5D8 /* ContentViewController.swift */,
@@ -274,10 +274,10 @@
 			files = (
 				4F3062F61D5D060700BF8FF9 /* TransactionsViewController.swift in Sources */,
 				4F01361B1DA47D1200E55492 /* TransactionCell.swift in Sources */,
-				4F3062FA1D6B972100BF8FF9 /* GoalsViewController.swift in Sources */,
 				4F01361E1DA4C82D00E55492 /* GroupCell.swift in Sources */,
 				4F43C1631DD19A9C00AAD4C0 /* NotificationExtension.swift in Sources */,
 				4F2430521D58263400F1A5D8 /* ContentViewController.swift in Sources */,
+				4F38BF1D1DED3CAD000A5983 /* GroupViewController.swift in Sources */,
 				4F3BC4AE1D6F6410007A3555 /* Group.swift in Sources */,
 				4F24303F1D5821D300F1A5D8 /* ViewController.swift in Sources */,
 				4F24303D1D5821D300F1A5D8 /* AppDelegate.swift in Sources */,
