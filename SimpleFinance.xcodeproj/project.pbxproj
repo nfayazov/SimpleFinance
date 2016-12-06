@@ -24,7 +24,6 @@
 		4F38BF1D1DED3CAD000A5983 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */; };
 		4F3BC4AC1D6E0F1C007A3555 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC4AB1D6E0F1C007A3555 /* Transaction.swift */; };
 		4F3BC4AE1D6F6410007A3555 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC4AD1D6F6410007A3555 /* Group.swift */; };
-		4F43C1631DD19A9C00AAD4C0 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F43C1621DD19A9C00AAD4C0 /* NotificationExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +46,6 @@
 		4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		4F3BC4AB1D6E0F1C007A3555 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		4F3BC4AD1D6F6410007A3555 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
-		4F43C1621DD19A9C00AAD4C0 /* NotificationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
 		4FD5A5381DC83EF200341B89 /* SimpleFinance.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleFinance.entitlements; sourceTree = "<group>"; };
 		A579213501EDBB62B1CF6AA8 /* Pods-SimpleFinance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFinance.release.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleFinance/Pods-SimpleFinance.release.xcconfig"; sourceTree = "<group>"; };
 		D5572D401F27B0291533E501 /* Pods_SimpleFinance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFinance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,7 +126,6 @@
 			isa = PBXGroup;
 			children = (
 				4F3BC4AB1D6E0F1C007A3555 /* Transaction.swift */,
-				4F43C1621DD19A9C00AAD4C0 /* NotificationExtension.swift */,
 				4F3BC4AD1D6F6410007A3555 /* Group.swift */,
 			);
 			name = Classes;
@@ -275,7 +272,6 @@
 				4F3062F61D5D060700BF8FF9 /* TransactionsViewController.swift in Sources */,
 				4F01361B1DA47D1200E55492 /* TransactionCell.swift in Sources */,
 				4F01361E1DA4C82D00E55492 /* GroupCell.swift in Sources */,
-				4F43C1631DD19A9C00AAD4C0 /* NotificationExtension.swift in Sources */,
 				4F2430521D58263400F1A5D8 /* ContentViewController.swift in Sources */,
 				4F38BF1D1DED3CAD000A5983 /* GroupViewController.swift in Sources */,
 				4F3BC4AE1D6F6410007A3555 /* Group.swift in Sources */,
