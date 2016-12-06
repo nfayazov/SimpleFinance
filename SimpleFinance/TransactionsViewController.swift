@@ -49,7 +49,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         
         tableView.register(TransactionCell.self, forCellReuseIdentifier: "cell")
         
-        
             getTransactionsWithSpinner()
             getTransactions()
         
@@ -141,16 +140,21 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
     
     @IBAction func addTransaction(_ sender: UIBarButtonItem) {
         
-        let addTransAlert = UIAlertController(title: "Add a transaction", message: "\n", preferredStyle: .alert)
+        let addTransAlert = UIAlertController(title: "Add a transaction", message: .none, preferredStyle: .alert)
         
         //add amount of transactions text field
         addTransAlert.addTextField(configurationHandler: { (textField) -> Void in
             self.amountField = textField
             textField.placeholder = "$$ spent"
             textField.keyboardType = UIKeyboardType.decimalPad
-            var frameRect: CGRect = textField.frame;
-            frameRect.size.height = 300
-            textField.frame = frameRect
+            
+            func textField(textField: UITextField!, shouldChangeCharactersInRange: NSRange, replacementString: String!) -> Bool {
+                
+                print(replacementString)
+                
+                return true
+                
+            }
             
             
         })
@@ -159,18 +163,12 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
             self.groupField = textField
             textField.placeholder = "Choose category"
             textField.inputView = self.groupPicker
-            var frameRect: CGRect = textField.frame;
-            frameRect.size.height = 300
-            textField.frame = frameRect
             
             })
         
         addTransAlert.addTextField { (textField) -> Void in
             self.descriptionField = textField
             textField.placeholder = "Description"
-            var frameRect: CGRect = textField.frame;
-            frameRect.size.height = 300
-            textField.frame = frameRect
         }
         
         addTransAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -179,10 +177,10 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         //grab the value from the text field, and print it when the user clicks OK.
         addTransAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
     
+            
             let amountField = addTransAlert.textFields![0] as UITextField
             let groupField = addTransAlert.textFields![1] as UITextField
             let descriptionField = addTransAlert.textFields![2] as UITextField
-
             
             if groupField.text != "" && amountField.text != "" && descriptionField.text != "" {
                 

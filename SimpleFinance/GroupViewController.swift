@@ -13,7 +13,7 @@ import Firebase
 
 class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    @IBOutlet var totalLabel: UILabel!
+    @IBOutlet var totalButton: UIButton!
     @IBOutlet var tableView: UITableView!
     var createCategoryField = UITextField()
     var goalField = UITextField()
@@ -31,6 +31,29 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         showSpinner()
         getGroups()
         getTotalGoal()
+        
+    }
+    
+    @IBAction func changeTotal(_ sender: Any) {
+        
+        let updateTotalAlert = UIAlertController(title: "Add a category", message: "\n", preferredStyle: .alert)
+        
+        updateTotalAlert.addTextField(configurationHandler: { (textField) -> Void in
+            textField.placeholder = "New Goal Amount"
+            textField.keyboardType = UIKeyboardType.decimalPad
+            self.createCategoryField = textField
+            
+        })
+        
+        updateTotalAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        updateTotalAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            
+            self.updateTotalGoal(newGoal: Double(self.createCategoryField.text!)!)
+            
+        }))
+        
+        self.present(updateTotalAlert, animated: true, completion: nil)
         
     }
     
@@ -246,8 +269,6 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: - Table view data source
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
@@ -272,8 +293,9 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         }
         
-        self.totalLabel.text = ("Total Spent/Monthly Goal: \(String(total))/\(String(describing: self.totalGoal))")
+        let totalString = ("Total Spent/Monthly Goal:         \(String(total))/\(String(describing: self.totalGoal))")
         
+        self.totalButton.setTitle(totalString, for: .normal)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -309,16 +331,24 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if editingStyle == .delete {
             
-            let group = groups[indexPath.row]
-            deleteGroup(group)
+            let deleteGroupAlert = UIAlertController(title: "Are you sure you want to delete this category and all of its transactions?", message: .none, preferredStyle: .alert)
+            
+            deleteGroupAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            
+            deleteGroupAlert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (action) -> Void in
+
+                let group = groups[indexPath.row]
+                self.deleteGroup(group)
+            
+            }))
+            
+            self.present(deleteGroupAlert, animated: true, completion: nil)
             
         }
         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        print(groups[indexPath.row].name)
         
         let addTotalAlert = UIAlertController(title: "Change goal", message: "What is your goal for this month?", preferredStyle: .alert)
         

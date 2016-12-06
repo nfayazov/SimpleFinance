@@ -189,7 +189,7 @@
                                 <rect key="frame" x="0.0" y="88" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2tc-Bh-g0t" id="E0w-xH-jgg">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="49.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -253,20 +253,21 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Total" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Go9-qx-H91">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fsB-JG-UrJ">
                                 <rect key="frame" x="0.0" y="561" width="375" height="57"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="changeTotal:" destination="NmY-gY-FzF" eventType="touchUpInside" id="Wk3-CQ-aFG"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Groups" id="9Wj-JY-bs9"/>
                     <connections>
                         <outlet property="tableView" destination="6Ee-GR-SLL" id="oeA-1Z-Dnd"/>
-                        <outlet property="totalLabel" destination="Go9-qx-H91" id="quM-X4-BXy"/>
+                        <outlet property="totalButton" destination="fsB-JG-UrJ" id="yn2-YN-464"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Ja-3b-HvR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -289,7 +290,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem title="Title" id="70d-9H-ey1"/>
+                                    <navigationItem title="Chart" id="70d-9H-ey1"/>
                                 </items>
                             </navigationBar>
                         </subviews>
@@ -331,7 +332,7 @@
                                 <rect key="frame" x="0.0" y="88" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="P1m-bN-Ig7" id="8Ow-1U-71W">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="49.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -358,9 +359,9 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="ksS-S6-vE8" kind="relationship" relationship="viewControllers" id="RKq-rK-9BP"/>
-                        <segue destination="uRx-La-aPL" kind="relationship" relationship="viewControllers" id="cEj-WO-cJb"/>
                         <segue destination="NmY-gY-FzF" kind="relationship" relationship="viewControllers" id="57M-s5-KQp"/>
+                        <segue destination="uRx-La-aPL" kind="relationship" relationship="viewControllers" id="cEj-WO-cJb"/>
+                        <segue destination="ksS-S6-vE8" kind="relationship" relationship="viewControllers" id="RKq-rK-9BP"/>
                         <segue destination="pPP-bD-XZp" kind="relationship" relationship="viewControllers" id="diQ-Ia-ptT"/>
                     </connections>
                 </tabBarController>
