@@ -17,6 +17,7 @@ var hasTransactions = false //don't need this
 
 class TransactionsViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
+    @IBOutlet var myImage: UIImageView!
     let groupPicker = UIPickerView()
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
@@ -55,6 +56,14 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
         })
+        
+        //imageView in the background
+        tableView.tableFooterView = UIView()
+        self.tableView.isOpaque = false;
+        let image: UIImage = UIImage(named: "image6.png")!
+        myImage = UIImageView(image: image)
+        self.tableView.addSubview(myImage!)
+        self.tableView.sendSubview(toBack: myImage)
         
     }
 
@@ -155,8 +164,7 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
                 return true
                 
             }
-            
-            
+
         })
         
         addTransAlert.addTextField(configurationHandler: { (textField) -> Void in
@@ -169,6 +177,8 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         addTransAlert.addTextField { (textField) -> Void in
             self.descriptionField = textField
             textField.placeholder = "Description"
+            textField.autocapitalizationType = UITextAutocapitalizationType.words
+            textField.autocorrectionType = UITextAutocorrectionType.yes
         }
         
         addTransAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

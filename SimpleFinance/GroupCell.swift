@@ -12,10 +12,11 @@ class GroupCell: UITableViewCell {
     
     let progressLabel: UILabel = {
     
-    let label = UILabel()
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = UIFont(name: "Helvetica Neue", size: 15)
-    return label
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "Helvetica Neue", size: 15)
+        return label
+        
     }()
     
     let colorLabel: UILabel = {
@@ -43,7 +44,9 @@ class GroupCell: UITableViewCell {
         colorLabel.widthAnchor.constraint(equalToConstant: 120).isActive = true
         colorLabel.heightAnchor.constraint(equalTo: (textLabel?.heightAnchor)!).isActive = true
         colorLabel.backgroundColor = UIColor.yellow
-        colorLabel.alpha = 0.4
+        colorLabel.alpha = 0.5
+        
+        
         
     }
 

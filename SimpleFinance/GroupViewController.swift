@@ -13,16 +13,19 @@ import Firebase
 
 class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet var bgImage: UIImageView!
     @IBOutlet var totalButton: UIButton!
     @IBOutlet var tableView: UITableView!
     var createCategoryField = UITextField()
     var goalField = UITextField()
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
-    var incomeField = UITextField()
+    var changeGoalField = UITextField()
+    var changeGroupNameField = UITextField()
     var totalGoal = 0.00
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -32,11 +35,19 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         getGroups()
         getTotalGoal()
         
+        //imageView in the background
+        tableView.tableFooterView = UIView()
+        self.tableView.isOpaque = false;
+        let image: UIImage = UIImage(named: "image5.jpg")!
+        bgImage = UIImageView(image: image)
+        self.tableView.addSubview(bgImage!)
+        self.tableView.sendSubview(toBack: bgImage)
+        
     }
     
     @IBAction func changeTotal(_ sender: Any) {
         
-        let updateTotalAlert = UIAlertController(title: "Add a category", message: "\n", preferredStyle: .alert)
+        let updateTotalAlert = UIAlertController(title: "Change your monthly goal", message: .none, preferredStyle: .alert)
         
         updateTotalAlert.addTextField(configurationHandler: { (textField) -> Void in
             textField.placeholder = "New Goal Amount"
@@ -142,6 +153,47 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    func changeName(newName: String, myGroup: Group){
+        
+        let user = FIRAuth.auth()?.currentUser
+        let ref = FIRDatabase.database().reference(fromURL: "https://simple-finance-b8edc.firebaseio.com/").child("categories").child((user?.uid)!)
+        
+        ref.observe(.childAdded, with: { (snap) -> Void in
+            
+            let group = Group()
+            
+            if let dict = snap.value as? [String: AnyObject] {
+                group.setValuesForKeys(dict)
+                if group.name == myGroup.name {
+                    
+                    snap.ref.child("name").setValue(String(newName))
+                    DispatchQueue.main.async(execute: {
+                        self.tableView.reloadData()
+                    })
+                    
+                    //change name in groups array
+                    var i = 0
+                    for item in groups {
+                        
+                        if item.name == myGroup.name{
+                            groups[i].name = String(newName)
+                        }
+                        
+                        i = i + 1
+                        
+                    }
+
+                    
+                }
+                
+            }
+            
+            
+        }, withCancel: nil)
+
+        
+    }
+    
     func updateGroupGoal(newGoal: Double, myGroup: Group){
         
         let user = FIRAuth.auth()?.currentUser
@@ -179,8 +231,6 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         }, withCancel: nil)
         
-        //ref.setValue(newGoal)
-        
     }
     
     @IBAction func addGroup(_ sender: Any) {
@@ -189,9 +239,12 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         //add amount of transactions text field
         addCategoryAlert.addTextField(configurationHandler: { (textField) -> Void in
-            self.createCategoryField = textField
             textField.placeholder = "Category"
-            
+            textField.keyboardType = UIKeyboardType.default
+            textField.autocapitalizationType = UITextAutocapitalizationType.words
+            textField.autocorrectionType = UITextAutocorrectionType.yes
+            self.createCategoryField = textField
+
         })
         
         addCategoryAlert.addTextField(configurationHandler: { (textField) -> Void in
@@ -306,6 +359,7 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 cell.textLabel?.text = groups[indexPath.row].name
                 cell.textLabel?.font = UIFont(name: "Helvetica Neue", size: 17)
                 
+                
                 let goal = Double(groups[indexPath.row].goal!)
                 let total = Double(groups[indexPath.row].total!)
                 let goalString = String(format: "%.2f", goal!)
@@ -315,6 +369,8 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let percent = (total/goal!) * 100
                 cell.detailTextLabel?.text = ("\(String(format: "%.2f", percent))%")
                 cell.detailTextLabel?.textColor = UIColor.lightGray
+                
+                
                 
             } else {
                 
@@ -345,6 +401,7 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.present(deleteGroupAlert, animated: true, completion: nil)
             
         }
+
         
     }
     
@@ -353,24 +410,41 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let addTotalAlert = UIAlertController(title: "Change goal", message: "What is your goal for this month?", preferredStyle: .alert)
         
         addTotalAlert.addTextField(configurationHandler: { (textField) -> Void in
-            self.incomeField = textField
-            textField.placeholder = "$$"
+            self.changeGroupNameField = textField
+            textField.placeholder = "New Name"
+            textField.autocapitalizationType = UITextAutocapitalizationType.words
+            textField.autocorrectionType = UITextAutocorrectionType.yes
             
         })
+        
+        addTotalAlert.addTextField(configurationHandler: { (textField) -> Void in
+            self.changeGoalField = textField
+            textField.placeholder = "$$"
+            textField.keyboardType = UIKeyboardType.decimalPad
+            
+        })
+
         
         addTotalAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         addTotalAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             
-            if self.incomeField.text != "" {
+            if self.changeGoalField.text != "" {
                 
-                self.updateGroupGoal(newGoal: Double(self.incomeField.text!)!, myGroup: groups[indexPath.row])
+                self.updateGroupGoal(newGoal: Double(self.changeGoalField.text!)!, myGroup: groups[indexPath.row])
+                
+            }
+            
+            if self.changeGroupNameField.text != ""{
+                
+                self.changeName(newName: self.changeGroupNameField.text!, myGroup: groups[indexPath.row])
                 
             }
             
         }))
         
         self.present(addTotalAlert, animated: true, completion: nil)
+        
         
     }
     
