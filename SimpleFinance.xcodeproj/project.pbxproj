@@ -24,7 +24,22 @@
 		4F38BF1D1DED3CAD000A5983 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */; };
 		4F3BC4AC1D6E0F1C007A3555 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC4AB1D6E0F1C007A3555 /* Transaction.swift */; };
 		4F3BC4AE1D6F6410007A3555 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC4AD1D6F6410007A3555 /* Group.swift */; };
+		4F7E048D1DFD0E6000FE20F3 /* image5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E048C1DFD0E6000FE20F3 /* image5.jpg */; };
+		4F7E048F1DFE2CA700FE20F3 /* image6.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E048E1DFE2CA700FE20F3 /* image6.png */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4F7E04641DF6678500FE20F3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3E7D0B53BABFCA146123AC4C /* Pods-SimpleFinance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFinance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleFinance/Pods-SimpleFinance.debug.xcconfig"; sourceTree = "<group>"; };
@@ -46,6 +61,8 @@
 		4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		4F3BC4AB1D6E0F1C007A3555 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		4F3BC4AD1D6F6410007A3555 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		4F7E048C1DFD0E6000FE20F3 /* image5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image5.jpg; sourceTree = SOURCE_ROOT; };
+		4F7E048E1DFE2CA700FE20F3 /* image6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image6.png; sourceTree = SOURCE_ROOT; };
 		4FD5A5381DC83EF200341B89 /* SimpleFinance.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleFinance.entitlements; sourceTree = "<group>"; };
 		A579213501EDBB62B1CF6AA8 /* Pods-SimpleFinance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFinance.release.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleFinance/Pods-SimpleFinance.release.xcconfig"; sourceTree = "<group>"; };
 		D5572D401F27B0291533E501 /* Pods_SimpleFinance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFinance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +135,8 @@
 				4F24304B1D5821D300F1A5D8 /* Info.plist */,
 				4F3062EB1D5BAD2000BF8FF9 /* GoogleService-Info.plist */,
 				4F2430431D5821D300F1A5D8 /* SimpleFinance.xcdatamodeld */,
+				4F7E048C1DFD0E6000FE20F3 /* image5.jpg */,
+				4F7E048E1DFE2CA700FE20F3 /* image6.png */,
 			);
 			path = SimpleFinance;
 			sourceTree = "<group>";
@@ -152,6 +171,7 @@
 				4F2430371D5821D300F1A5D8 /* Resources */,
 				D76805C1B096D2F30DDB3DD5 /* [CP] Embed Pods Frameworks */,
 				E23D19F88BDF8CB3D1857C80 /* [CP] Copy Pods Resources */,
+				4F7E04641DF6678500FE20F3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -208,8 +228,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F24304A1D5821D300F1A5D8 /* LaunchScreen.storyboard in Resources */,
+				4F7E048D1DFD0E6000FE20F3 /* image5.jpg in Resources */,
 				4F3062EC1D5BAD2000BF8FF9 /* GoogleService-Info.plist in Resources */,
 				4F2430471D5821D300F1A5D8 /* Assets.xcassets in Resources */,
+				4F7E048F1DFE2CA700FE20F3 /* image6.png in Resources */,
 				4F2430421D5821D300F1A5D8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,6 +413,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3E7D0B53BABFCA146123AC4C /* Pods-SimpleFinance.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleFinance/SimpleFinance.entitlements;
 				DEVELOPMENT_TEAM = VRSN48FL7R;
@@ -406,6 +429,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A579213501EDBB62B1CF6AA8 /* Pods-SimpleFinance.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SimpleFinance/SimpleFinance.entitlements;
 				DEVELOPMENT_TEAM = VRSN48FL7R;
