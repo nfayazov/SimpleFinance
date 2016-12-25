@@ -13,7 +13,6 @@ import Firebase
 
 class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    @IBOutlet var bgImage: UIImageView!
     @IBOutlet var totalButton: UIButton!
     @IBOutlet var tableView: UITableView!
     var createCategoryField = UITextField()
@@ -38,10 +37,6 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         //imageView in the background
         tableView.tableFooterView = UIView()
         self.tableView.isOpaque = false;
-        let image: UIImage = UIImage(named: "image5.jpg")!
-        bgImage = UIImageView(image: image)
-        self.tableView.addSubview(bgImage!)
-        self.tableView.sendSubview(toBack: bgImage)
         
     }
     
@@ -329,11 +324,8 @@ class GroupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if groups.count != 0 {
-            return groups.count
-        } else {
-            return 1
-        }
+        
+        return groups.count
     }
     
     func reloadTotalSpent() -> Void {

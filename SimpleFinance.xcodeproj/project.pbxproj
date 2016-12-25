@@ -10,6 +10,8 @@
 		44C17FBAC497E37B1A621CE3 /* Pods_SimpleFinance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5572D401F27B0291533E501 /* Pods_SimpleFinance.framework */; };
 		4F01361B1DA47D1200E55492 /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F01361A1DA47D1200E55492 /* TransactionCell.swift */; };
 		4F01361E1DA4C82D00E55492 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F01361D1DA4C82D00E55492 /* GroupCell.swift */; };
+		4F12F75B1E0F8C8C00CDDBDE /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12F75A1E0F8C8C00CDDBDE /* Settings.swift */; };
+		4F12F75D1E0F90FB00CDDBDE /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12F75C1E0F90FB00CDDBDE /* AboutViewController.swift */; };
 		4F24303D1D5821D300F1A5D8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F24303C1D5821D300F1A5D8 /* AppDelegate.swift */; };
 		4F24303F1D5821D300F1A5D8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F24303E1D5821D300F1A5D8 /* ViewController.swift */; };
 		4F2430421D5821D300F1A5D8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F2430401D5821D300F1A5D8 /* Main.storyboard */; };
@@ -19,13 +21,10 @@
 		4F2430521D58263400F1A5D8 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2430511D58263400F1A5D8 /* ContentViewController.swift */; };
 		4F3062EC1D5BAD2000BF8FF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F3062EB1D5BAD2000BF8FF9 /* GoogleService-Info.plist */; };
 		4F3062EE1D5BBF5F00BF8FF9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3062ED1D5BBF5F00BF8FF9 /* LoginViewController.swift */; };
-		4F3062F41D5CF9C000BF8FF9 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3062F31D5CF9C000BF8FF9 /* SettingsViewController.swift */; };
 		4F3062F61D5D060700BF8FF9 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3062F51D5D060700BF8FF9 /* TransactionsViewController.swift */; };
 		4F38BF1D1DED3CAD000A5983 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */; };
 		4F3BC4AC1D6E0F1C007A3555 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC4AB1D6E0F1C007A3555 /* Transaction.swift */; };
 		4F3BC4AE1D6F6410007A3555 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC4AD1D6F6410007A3555 /* Group.swift */; };
-		4F7E048D1DFD0E6000FE20F3 /* image5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E048C1DFD0E6000FE20F3 /* image5.jpg */; };
-		4F7E048F1DFE2CA700FE20F3 /* image6.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E048E1DFE2CA700FE20F3 /* image6.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +44,8 @@
 		3E7D0B53BABFCA146123AC4C /* Pods-SimpleFinance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFinance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleFinance/Pods-SimpleFinance.debug.xcconfig"; sourceTree = "<group>"; };
 		4F01361A1DA47D1200E55492 /* TransactionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
 		4F01361D1DA4C82D00E55492 /* GroupCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
+		4F12F75A1E0F8C8C00CDDBDE /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		4F12F75C1E0F90FB00CDDBDE /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		4F2430391D5821D300F1A5D8 /* SimpleFinance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleFinance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F24303C1D5821D300F1A5D8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F24303E1D5821D300F1A5D8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,13 +57,10 @@
 		4F2430511D58263400F1A5D8 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		4F3062EB1D5BAD2000BF8FF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4F3062ED1D5BBF5F00BF8FF9 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		4F3062F31D5CF9C000BF8FF9 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		4F3062F51D5D060700BF8FF9 /* TransactionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		4F3BC4AB1D6E0F1C007A3555 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		4F3BC4AD1D6F6410007A3555 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
-		4F7E048C1DFD0E6000FE20F3 /* image5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image5.jpg; sourceTree = SOURCE_ROOT; };
-		4F7E048E1DFE2CA700FE20F3 /* image6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image6.png; sourceTree = SOURCE_ROOT; };
 		4FD5A5381DC83EF200341B89 /* SimpleFinance.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleFinance.entitlements; sourceTree = "<group>"; };
 		A579213501EDBB62B1CF6AA8 /* Pods-SimpleFinance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFinance.release.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleFinance/Pods-SimpleFinance.release.xcconfig"; sourceTree = "<group>"; };
 		D5572D401F27B0291533E501 /* Pods_SimpleFinance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFinance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,9 +123,10 @@
 				4F24303C1D5821D300F1A5D8 /* AppDelegate.swift */,
 				4F24303E1D5821D300F1A5D8 /* ViewController.swift */,
 				4F2430401D5821D300F1A5D8 /* Main.storyboard */,
+				4F12F75C1E0F90FB00CDDBDE /* AboutViewController.swift */,
+				4F12F75A1E0F8C8C00CDDBDE /* Settings.swift */,
 				4F38BF1C1DED3CAD000A5983 /* GroupViewController.swift */,
 				4F3062F51D5D060700BF8FF9 /* TransactionsViewController.swift */,
-				4F3062F31D5CF9C000BF8FF9 /* SettingsViewController.swift */,
 				4F3062ED1D5BBF5F00BF8FF9 /* LoginViewController.swift */,
 				4F2430511D58263400F1A5D8 /* ContentViewController.swift */,
 				4F2430461D5821D300F1A5D8 /* Assets.xcassets */,
@@ -135,8 +134,6 @@
 				4F24304B1D5821D300F1A5D8 /* Info.plist */,
 				4F3062EB1D5BAD2000BF8FF9 /* GoogleService-Info.plist */,
 				4F2430431D5821D300F1A5D8 /* SimpleFinance.xcdatamodeld */,
-				4F7E048C1DFD0E6000FE20F3 /* image5.jpg */,
-				4F7E048E1DFE2CA700FE20F3 /* image6.png */,
 			);
 			path = SimpleFinance;
 			sourceTree = "<group>";
@@ -228,10 +225,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F24304A1D5821D300F1A5D8 /* LaunchScreen.storyboard in Resources */,
-				4F7E048D1DFD0E6000FE20F3 /* image5.jpg in Resources */,
 				4F3062EC1D5BAD2000BF8FF9 /* GoogleService-Info.plist in Resources */,
 				4F2430471D5821D300F1A5D8 /* Assets.xcassets in Resources */,
-				4F7E048F1DFE2CA700FE20F3 /* image6.png in Resources */,
 				4F2430421D5821D300F1A5D8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -293,6 +288,7 @@
 			files = (
 				4F3062F61D5D060700BF8FF9 /* TransactionsViewController.swift in Sources */,
 				4F01361B1DA47D1200E55492 /* TransactionCell.swift in Sources */,
+				4F12F75B1E0F8C8C00CDDBDE /* Settings.swift in Sources */,
 				4F01361E1DA4C82D00E55492 /* GroupCell.swift in Sources */,
 				4F2430521D58263400F1A5D8 /* ContentViewController.swift in Sources */,
 				4F38BF1D1DED3CAD000A5983 /* GroupViewController.swift in Sources */,
@@ -301,7 +297,7 @@
 				4F24303D1D5821D300F1A5D8 /* AppDelegate.swift in Sources */,
 				4F3062EE1D5BBF5F00BF8FF9 /* LoginViewController.swift in Sources */,
 				4F2430451D5821D300F1A5D8 /* SimpleFinance.xcdatamodeld in Sources */,
-				4F3062F41D5CF9C000BF8FF9 /* SettingsViewController.swift in Sources */,
+				4F12F75D1E0F90FB00CDDBDE /* AboutViewController.swift in Sources */,
 				4F3BC4AC1D6E0F1C007A3555 /* Transaction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
