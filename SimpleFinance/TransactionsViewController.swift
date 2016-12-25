@@ -17,7 +17,6 @@ var hasTransactions = false //don't need this
 
 class TransactionsViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
-    @IBOutlet var myImage: UIImageView!
     let groupPicker = UIPickerView()
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
@@ -60,10 +59,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         //imageView in the background
         tableView.tableFooterView = UIView()
         self.tableView.isOpaque = false;
-        let image: UIImage = UIImage(named: "image6.png")!
-        myImage = UIImageView(image: image)
-        self.tableView.addSubview(myImage!)
-        self.tableView.sendSubview(toBack: myImage)
         
     }
 
@@ -287,8 +282,6 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
@@ -297,13 +290,7 @@ class TransactionsViewController: UITableViewController, UIPickerViewDataSource,
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         
-        //only checking for tranactions
-        
-        if transactions.count == 0 {
-            return 1
-        } else {
-            return transactions.count
-        }
+        return transactions.count
         
     }
     
